@@ -12,6 +12,11 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+  
+- task: CmdLine@2
+  inputs:
+    script: 'java -version'
+    
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
