@@ -13,9 +13,6 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
   
-- task: CmdLine@2
-  inputs:
-    script: 'java -version'
     
 
 - script: |
