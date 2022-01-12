@@ -17,7 +17,7 @@ steps:
   displayName: 'Find out Java Version'
 
 - script: 'node -v'
-  displayName: 'Find out Node Version'
+  displayName: 'Find out Node Version. ChangedBy: $(Changed By)'
   
     
 
