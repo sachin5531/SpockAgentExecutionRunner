@@ -12,6 +12,12 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+
+- script: 'java -version'
+  displayName: 'Find out Java Version'
+
+- script: 'node -v'
+  displayName: 'Find out Node Version'
   
     
 
