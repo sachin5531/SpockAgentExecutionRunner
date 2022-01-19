@@ -55,6 +55,16 @@ namespace InstantSpockExecutionRunner
             var stringLength = 5;
             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+            var javaHome = Environment.GetEnvironmentVariable("JAVA_HOME");
+
+            if (String.IsNullOrEmpty(javaHome))
+                throw new Exception("JAVA_HOME is not set in environment variables.");
+
+            var javaPath = Path.Combine(javaHome, "bin", "java.exe");
+
+            if (!System.IO.File.Exists(javaPath))
+                throw new Exception($"Java{javaPath} not found.");
+
             for (var i = 0; i < stringLength; i++)
             {
                 var pos = Convert.ToInt16(new Random().Next(0, possible.Length));
@@ -72,7 +82,7 @@ namespace InstantSpockExecutionRunner
             psi.ArgumentList.Add("-jar");
             psi.ArgumentList.Add(teleportingTunnelJar.FullName);
             psi.ArgumentList.Add("OpKeyTeleportingTunnel:" + encodedToken);
-            psi.ArgumentList.Add("C:\\Program Files\\Java\\jdk1.8.0_201\\bin\\java.exe");
+            psi.ArgumentList.Add(javaPath);
             psi.ArgumentList.Add("8");
             psi.RedirectStandardError = true;
             psi.RedirectStandardOutput = true;
