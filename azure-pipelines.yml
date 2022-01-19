@@ -30,6 +30,12 @@ steps:
   inputs:
     script: 'dir'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    workingDirectory: 'InstantSpockExecutionRunner'
+    
 - task: CmdLine@2
   inputs:
     script: 'InstantSpockExecutionRunner.exe'
