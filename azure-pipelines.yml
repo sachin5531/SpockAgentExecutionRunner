@@ -12,9 +12,18 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+  
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '8'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
 
 - script: 'java -version'
   displayName: 'Find out Java Version'
+
+- script: echo $(JAVA_HOME)
+  displayName: Display Java Home
 
 - script: 'node -v'
   displayName: 'Find out Node Version. ChangedBy: $(Changed By)'
