@@ -38,7 +38,7 @@ steps:
     
 - task: CmdLine@2
   inputs:
-    script: 'InstantSpockExecutionRunner.exe --environmentType=$(environmentType) --opkeyBaseUrl=$(opKeyBaseUrl) --sessionName=$(sessionName) --defaultPlugin=$(defaultPlugin) --build=$(build) --suitepath=$(suitePath) --browser=$(browser) --username=$(username) --apikey=$(apiKey) --project=$(project)'
+    script: 'InstantSpockExecutionRunner.exe "--environmentType=$(environmentType)" "--opkeyBaseUrl=$(opKeyBaseUrl)" "--sessionName=$(sessionName)" "--defaultPlugin=$(defaultPlugin)" "--build=$(build)" "--suitepath=$(suitePath)" "--browser=$(browser)" "--username=$(username)" "--apikey=$(apiKey)" "--project=$(project)"'
     workingDirectory: '.\InstantSpockExecutionRunner\InstantSpockExecutionRunner\bin\Debug\netcoreapp3.1'
     
 
