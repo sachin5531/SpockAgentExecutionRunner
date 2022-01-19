@@ -2,7 +2,7 @@
   "profiles": {
     "InstantSpockExecutionRunner": {
       "commandName": "Project",
-      "commandLineArgs": "--environmentType=Stg --opkeyBaseUrl=https://qa1.stg.smartopkey.com --sessionName=Test --defaultPlugin=Web"
+      "commandLineArgs": "--environmentType=Local --opkeyBaseUrl=http://localhost:56994/ --sessionName=Test --defaultPlugin=Web --build=\"Spock Execution Runner\" --suitepath=\"Project Workspace\\Opkey Test\\OpkeyTestSuite\" --browser=Chrome --username=admin --apikey=\"W418PNA1YV5G6LASC2\" --project=\"P1\""
     }
   }
 }

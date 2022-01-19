@@ -3,7 +3,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstantSpockExecutionRunner
 {
@@ -20,6 +23,8 @@ namespace InstantSpockExecutionRunner
             waitForTeleportingTunnelOnline(dto, customSpockToken);
 
             //now do FinalLocalExecutionInner()
+            InitiateSpockExecution(dto , customSpockToken);
+
             teleportingTunnelProcess.WaitForExit();
         }
 
@@ -66,11 +71,24 @@ namespace InstantSpockExecutionRunner
             ProcessStartInfo psi = new ProcessStartInfo("java.exe");
             psi.ArgumentList.Add("-jar");
             psi.ArgumentList.Add(teleportingTunnelJar.FullName);
-            psi.ArgumentList.Add(encodedToken);
+            psi.ArgumentList.Add("OpKeyTeleportingTunnel:" + encodedToken);
+            psi.ArgumentList.Add("C:\\Program Files\\Java\\jdk1.8.0_201\\bin\\java.exe");
+            psi.ArgumentList.Add("8");
             psi.RedirectStandardError = true;
             psi.RedirectStandardOutput = true;
+
             teleportingTunnelProcess = Process.Start(psi);
-           
+
+            teleportingTunnelProcess.EnableRaisingEvents = true;
+            teleportingTunnelProcess.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_OutputDataReceived);
+            teleportingTunnelProcess.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_ErrorDataReceived);
+            teleportingTunnelProcess.Exited += new System.EventHandler(process_Exited);
+
+
+            teleportingTunnelProcess.BeginErrorReadLine();
+            teleportingTunnelProcess.BeginOutputReadLine();
+
+
             return customSpockToken;
         }
 
@@ -91,5 +109,59 @@ namespace InstantSpockExecutionRunner
 
 
         }
+
+        static void process_Exited(object sender, EventArgs e)
+        {
+            Console.WriteLine(string.Format("process exited with code {0}\n", teleportingTunnelProcess.ExitCode.ToString()));
+        }
+
+        static void process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Data + "\n");
+        }
+
+        static void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Data + "\n");
+        }
+
+        private static async void InitiateSpockExecution(InstantSpockExecutionDTO dto , String customSpockToken)
+        {
+
+            var url = dto.opkeyBaseUrl() + "/api/SpockRestAPI/RunSpockExecution";
+            HttpClient client = new HttpClient();
+
+            ExecutionDataDTO executionDataDTO = new ExecutionDataDTO()
+            {
+                suitePath = dto.suitepath(),
+                build = dto.build(),
+                session = dto.sessionName(),
+                plugin = dto.defaultPlugin(),
+                SpockAgentBrowser = dto.browser(),
+                token = customSpockToken
+            };
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(executionDataDTO);
+            var data = new System.Net.Http.StringContent(json, Encoding.UTF8, "application/json");
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+            var base64EncodedAuthenticationString = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{dto.username()}:{dto.apikey()}"));
+            
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
+            requestMessage.Content = data;
+
+            requestMessage.Headers.Add("project", dto.project());
+            requestMessage.Headers.Add("serverURL", dto.opkeyBaseUrl());
+
+            var response = await client.SendAsync(requestMessage);
+
+            string result = response.Content.ReadAsStringAsync().Result;
+
+            Console.WriteLine(result);
+            
+
+        }
+
+    
     }
 }

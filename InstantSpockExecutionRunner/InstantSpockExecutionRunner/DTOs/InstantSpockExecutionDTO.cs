@@ -29,6 +29,24 @@ namespace InstantSpockExecutionRunner.DTOs
             if (String.IsNullOrEmpty(defaultPlugin()))
                 throw new SpockArgumentException("defaultPlugin");
 
+            if (String.IsNullOrEmpty(build()))
+                throw new SpockArgumentException("build");
+
+            if (String.IsNullOrEmpty(suitepath()))
+                throw new SpockArgumentException("suitepath");
+
+            if (String.IsNullOrEmpty(browser()))
+                throw new SpockArgumentException("browser");
+
+            if (String.IsNullOrEmpty(username()))
+                throw new SpockArgumentException("username");
+
+            if (String.IsNullOrEmpty(apikey()))
+                throw new SpockArgumentException("apikey");
+
+            if (String.IsNullOrEmpty(project()))
+                throw new SpockArgumentException("project");
+
         }
 
         public void print()
@@ -78,6 +96,35 @@ namespace InstantSpockExecutionRunner.DTOs
             return getArgValue();
         }
 
+        public String build()
+        {
+            return getArgValue();
+        }
+
+        public String suitepath()
+        {
+            return getArgValue();
+        }
+
+        public String browser()
+        {
+            return getArgValue();
+        }
+
+        public String username()
+        {
+            return getArgValue();
+        }
+
+        public String apikey()
+        {
+            return getArgValue();
+        }
+
+        public String project()
+        {
+            return getArgValue();
+        }
 
     }
 }
