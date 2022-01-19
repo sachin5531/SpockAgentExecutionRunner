@@ -18,6 +18,8 @@ namespace InstantSpockExecutionRunner
             var customSpockToken = launchTeleportingTunnel(dto.environmentType(), dto.opkeyBaseUrl());
             waitForTeleportingTunnelOnline(dto, customSpockToken);
 
+            //now do FinalLocalExecutionInner()
+            teleportingTunnelProcess.WaitForExit();
         }
 
         private static InstantSpockExecutionDTO validateArgs(string[] args)
@@ -67,8 +69,7 @@ namespace InstantSpockExecutionRunner
             psi.RedirectStandardError = true;
             psi.RedirectStandardOutput = true;
             teleportingTunnelProcess = Process.Start(psi);
-            teleportingTunnelProcess.WaitForExit();
-
+           
             return customSpockToken;
         }
 
@@ -82,8 +83,9 @@ namespace InstantSpockExecutionRunner
                 var response = client.GetAsync(apiUrl).Result.Content.ReadAsStringAsync().Result;
                 if (response == "Awake")
                     return;
+                Thread.Sleep(1000);
             }
-            throw new Exception("Waited for 3 minutes for the SpockAgent to come online. Exiting now.")
+            throw new Exception("Waited for 3 minutes for the SpockAgent to come online. Exiting now.");
 
 
 
