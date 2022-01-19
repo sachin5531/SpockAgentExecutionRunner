@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 
 namespace InstantSpockExecutionRunner
 {
@@ -14,7 +15,9 @@ namespace InstantSpockExecutionRunner
             InstantSpockExecutionDTO dto = validateArgs(args);
             dto.print();
 
-            launchTeleportingTunnel(dto.environmentType(), dto.opkeyBaseUrl());
+            var customSpockToken = launchTeleportingTunnel(dto.environmentType(), dto.opkeyBaseUrl());
+            waitForTeleportingTunnelOnline(dto, customSpockToken);
+
         }
 
         private static InstantSpockExecutionDTO validateArgs(string[] args)
@@ -69,9 +72,21 @@ namespace InstantSpockExecutionRunner
             return customSpockToken;
         }
 
-        private static void waitForTeleportingTunnelOnline(InstantSpockExecutionDTO dto)
+        private static void waitForTeleportingTunnelOnline(InstantSpockExecutionDTO dto, String customSpockToken)
         {
-            var apiUrl = dto.opkeyBaseUrl() + "/SpockAgentApi/GetTokenStatus";
+            var apiUrl = dto.opkeyBaseUrl() + "/SpockAgentApi/GetTokenStatus?token=" + customSpockToken;
+            HttpClient client = new HttpClient();
+            var startedOn = DateTime.Now;
+            while ((DateTime.Now - startedOn).TotalMinutes < 3)
+            {
+                var response = client.GetAsync(apiUrl).Result.Content.ReadAsStringAsync().Result;
+                if (response == "Awake")
+                    return;
+            }
+            throw new Exception("Waited for 3 minutes for the SpockAgent to come online. Exiting now.")
+
+
+
         }
     }
 }
