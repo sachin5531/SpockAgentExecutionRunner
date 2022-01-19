@@ -7,21 +7,36 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
+
 
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+  
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '8'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
 
 - script: 'java -version'
   displayName: 'Find out Java Version'
 
-- script: 'node -v'
-  displayName: 'Find out Node Version. ChangedBy: $(Changed By)'
-  
-    
+- script: echo $(JAVA_HOME)
+  displayName: Display Java Home
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: CmdLine@2
+  inputs:
+    script: 'dir'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    workingDirectory: 'InstantSpockExecutionRunner'
+    
+- task: CmdLine@2
+  inputs:
+    script: 'InstantSpockExecutionRunner.exe'
+    workingDirectory: '.\InstantSpockExecutionRunner\InstantSpockExecutionRunner\bin\Debug\netcoreapp3.1'
