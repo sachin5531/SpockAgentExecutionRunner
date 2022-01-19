@@ -46,7 +46,7 @@ namespace InstantSpockExecutionRunner
 
             for (var i = 0; i < stringLength; i++)
             {
-                var pos = Convert.ToInt16(Math.Floor(Convert.ToDouble(new Random().Next(0, 1) * possible.Length)));
+                var pos = Convert.ToInt16(new Random().Next(0, possible.Length));
                 spockToken += possible[pos];
             }
 
