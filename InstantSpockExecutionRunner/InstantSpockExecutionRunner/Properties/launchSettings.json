@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "InstantSpockExecutionRunner": {
+      "commandName": "Project",
+      "commandLineArgs": "--environmentType=Stg --opkeyBaseUrl=https://qa1.stg.smartopkey.com --sessionName=Test --defaultPlugin=Web"
+    }
+  }
+}
