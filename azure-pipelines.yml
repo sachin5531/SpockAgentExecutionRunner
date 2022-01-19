@@ -7,7 +7,8 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
+
 
 steps:
 - script: echo Hello, world!
@@ -25,12 +26,11 @@ steps:
 - script: echo $(JAVA_HOME)
   displayName: Display Java Home
 
-- script: 'node -v'
-  displayName: 'Find out Node Version. ChangedBy: $(Changed By)'
-  
-    
+- task: CmdLine@2
+  inputs:
+    script: 'dir'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: CmdLine@2
+  inputs:
+    script: 'InstantSpockExecutionRunner.exe'
+    workingDirectory: '.\InstantSpockExecutionRunner\InstantSpockExecutionRunner\bin\Debug\netcoreapp3.1'
