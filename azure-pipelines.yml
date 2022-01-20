@@ -11,7 +11,7 @@ pool:
 
 
 steps:
-- script: echo Hello, world!
+- script: echo Hello, Welcome to OpKey's Instant Remote Execution via Spock Agent!
   displayName: 'Run a one-line script'
   
 - task: JavaToolInstaller@0
