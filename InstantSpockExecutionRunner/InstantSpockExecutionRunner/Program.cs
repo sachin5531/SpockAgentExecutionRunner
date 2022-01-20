@@ -23,7 +23,7 @@ namespace InstantSpockExecutionRunner
             waitForTeleportingTunnelOnline(dto, customSpockToken);
 
             //now do FinalLocalExecutionInner()
-            InitiateSpockExecution(dto , customSpockToken);
+            InitiateSpockExecution(dto, customSpockToken);
 
             teleportingTunnelProcess.WaitForExit();
         }
@@ -127,15 +127,17 @@ namespace InstantSpockExecutionRunner
 
         static void process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Console.WriteLine(e.Data + "\n");
+            if (e.Data.Trim().Length > 0)
+                Console.Error.WriteLine(e.Data.Trim());
         }
 
         static void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Console.WriteLine(e.Data + "\n");
+            if (e.Data.Trim().Length > 0)
+                Console.Out.WriteLine(e.Data.Trim());
         }
 
-        private static async void InitiateSpockExecution(InstantSpockExecutionDTO dto , String customSpockToken)
+        private static async void InitiateSpockExecution(InstantSpockExecutionDTO dto, String customSpockToken)
         {
 
             var url = dto.opkeyBaseUrl() + "/api/SpockRestAPI/RunSpockExecution";
@@ -156,7 +158,7 @@ namespace InstantSpockExecutionRunner
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
             var base64EncodedAuthenticationString = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{dto.username()}:{dto.apikey()}"));
-            
+
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
             requestMessage.Content = data;
 
@@ -168,10 +170,10 @@ namespace InstantSpockExecutionRunner
             string result = response.Content.ReadAsStringAsync().Result;
 
             Console.WriteLine(result);
-            
+
 
         }
 
-    
+
     }
 }
