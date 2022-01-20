@@ -79,8 +79,9 @@ namespace InstantSpockExecutionRunner
             var teleportingTunnelJar = new FileInfo("../../../../../Latest/OpkeyTeleportingTunnelUtility.jar");
 
             ProcessStartInfo psi = new ProcessStartInfo("java.exe");
-            psi.ArgumentList.Add("-jar");
+            psi.ArgumentList.Add("-cp");
             psi.ArgumentList.Add(teleportingTunnelJar.FullName);
+            psi.ArgumentList.Add("com.ssts.sshTeleportingTunnel.CLI_Startup");
             psi.ArgumentList.Add("OpKeyTeleportingTunnel:" + encodedToken);
             psi.ArgumentList.Add(javaPath);
             psi.ArgumentList.Add("8");
