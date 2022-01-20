@@ -12,8 +12,8 @@ pool:
 
 steps:
 - script: echo Hello, Welcome to OpKey's Instant Remote Execution via Spock Agent!
-  displayName: 'Run a one-line script'
-  
+  displayName: 'Script Starts here'
+
 - task: JavaToolInstaller@0
   displayName: 'Change default Java to JDK version 8'
   inputs:
