@@ -128,13 +128,13 @@ namespace InstantSpockExecutionRunner
 
         static void process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (e.Data.Trim().Length > 0)
+            if (!string.IsNullOrWhiteSpace(e.Data))
                 Console.Error.WriteLine(e.Data.Trim());
         }
 
         static void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (e.Data.Trim().Length > 0)
+            if (!string.IsNullOrWhiteSpace(e.Data))
                 Console.Out.WriteLine(e.Data.Trim());
         }
 
