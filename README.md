@@ -1,17 +1,17 @@
 # InstantSpockExecutionRunner
----
-##### This is a utility created to execute Opkey Executions through its Spock Agent Capability on a fresh machine like Azure Pipeline. This can be extended to be used with Docker Images as well.
+
+ This is a utility created to execute Opkey Executions through its Spock Agent Capability on a fresh machine like Azure Pipeline. This can be extended to be used with Docker Images as well.
 
 <br/>
-<br/>
 
-# Prerequisites
+
+## Prerequisites
  - JDK 8 or 17(Open JDK or OracleJDK)
  - Browsers needs to be installed in the image(Chrome, MsEdge, Firefox). The drivers will be fetched from Opkeys Driver registry from AwsS3
  - dotnet core environment to build the project(optional)
    
  
-```sh
+```bash
 InstantSpockExecutionRunner.exe "--environmentType=$(environmentType)" "--opkeyBaseUrl=$(opKeyBaseUrl)" "--sessionName=$(sessionName)" "--defaultPlugin=$(defaultPlugin)" "--build=$(build)" "--suitepath=$(suitePath)" "--browser=$(browser)" "--username=$(username)" "--apikey=$(apiKey)" "--project=$(project)"
 ```
 
