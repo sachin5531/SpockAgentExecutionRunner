@@ -11,13 +11,13 @@
  - dotnet core environment to build the project(optional)
    
  
-```bash
+```console
 InstantSpockExecutionRunner.exe "--environmentType=$(environmentType)" "--opkeyBaseUrl=$(opKeyBaseUrl)" "--sessionName=$(sessionName)" "--defaultPlugin=$(defaultPlugin)" "--build=$(build)" "--suitepath=$(suitePath)" "--browser=$(browser)" "--username=$(username)" "--apikey=$(apiKey)" "--project=$(project)"
 ```
 
 
 ### Example:
-```bash
+```shell
 InstantSpockExecutionRunner.exe "--environmentType=PROD" "--opkeyBaseUrl=https://qa1.myopkey.com" "--sessionName=MySpockSession" "--defaultPlugin=Web" "--build=Build-One" "--suitepath=ProjectWorkspace/Folder1/Suite1" "--browser=Chrome" "--username=YOUR_OPKEY_EMAIL_ID" "--apikey=YOUR_OPKEY_API_KEY" "--project=Project_1"
 ```
 
