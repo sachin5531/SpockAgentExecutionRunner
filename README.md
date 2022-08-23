@@ -6,19 +6,20 @@
 
 
 ## Prerequisites
- - JDK 8 or 17(Open JDK or OracleJDK)
+ - JDK 8(Open JDK or OracleJDK)
  - Browsers needs to be installed in the image(Chrome, MsEdge, Firefox). The drivers will be fetched from Opkeys Driver registry from AwsS3
  - dotnet core environment to build the project(optional)
+ - This assumes that the Latest OpkeyTeleportingTunnelUtility.jar is present at ```.\Latest\OpkeyTeleportingTunnelUtility.jar```
    
  
 ```console
-InstantSpockExecutionRunner.exe "--environmentType=$(environmentType)" "--opkeyBaseUrl=$(opKeyBaseUrl)" "--sessionName=$(sessionName)" "--defaultPlugin=$(defaultPlugin)" "--build=$(build)" "--suitepath=$(suitePath)" "--browser=$(browser)" "--username=$(username)" "--apikey=$(apiKey)" "--project=$(project)"
+.\Build\InstantSpockExecutionRunner.exe "--environmentType=$(environmentType)" "--opkeyBaseUrl=$(opKeyBaseUrl)" "--sessionName=$(sessionName)" "--defaultPlugin=$(defaultPlugin)" "--build=$(build)" "--suitepath=$(suitePath)" "--browser=$(browser)" "--username=$(username)" "--apikey=$(apiKey)" "--project=$(project)"
 ```
 
 
 ### Example:
 ```shell
-InstantSpockExecutionRunner.exe "--environmentType=PROD" "--opkeyBaseUrl=https://qa1.myopkey.com" "--sessionName=MySpockSession" "--defaultPlugin=Web" "--build=Build-One" "--suitepath=ProjectWorkspace/Folder1/Suite1" "--browser=Chrome" "--username=YOUR_OPKEY_EMAIL_ID" "--apikey=YOUR_OPKEY_API_KEY" "--project=Project_1"
+.\Build\InstantSpockExecutionRunner.exe "--environmentType=STG" "--opkeyBaseUrl=https://qa1.stg.smartopkey.com" "--sessionName=MySpockSession" "--defaultPlugin=Web" "--build=Build-One" "--suitepath=ProjectWorkspace/Folder1/Suite1" "--browser=Chrome" "--username=YOUR_OPKEY_EMAIL_ID" "--apikey=YOUR_OPKEY_API_KEY" "--project=Project_1"
 ```
 
 ### License

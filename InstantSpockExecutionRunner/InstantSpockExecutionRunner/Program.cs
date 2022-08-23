@@ -77,6 +77,14 @@ namespace InstantSpockExecutionRunner
             var encodedToken = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(spockArgument));
 
             var teleportingTunnelJar = new FileInfo("../../../../../Latest/OpkeyTeleportingTunnelUtility.jar");
+            if (!teleportingTunnelJar.Exists)
+            {
+                teleportingTunnelJar = new FileInfo("./Latest/OpkeyTeleportingTunnelUtility.jar");
+            }
+
+            if (!teleportingTunnelJar.Exists)
+                throw new FileNotFoundException(teleportingTunnelJar.FullName);
+
 
             ProcessStartInfo psi = new ProcessStartInfo("java.exe");
             psi.ArgumentList.Add("-cp");
