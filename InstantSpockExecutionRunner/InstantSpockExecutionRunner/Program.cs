@@ -15,11 +15,15 @@ namespace InstantSpockExecutionRunner
     {
         static Process runTeleportingTunnelProcess = null;
         static Process installTeleportingTunnelProcess = null;
+        static Process registryFinderProcess = null;
 
         static void Main(string[] args)
         {
             InstantSpockExecutionDTO dto = validateArgs(args);
             dto.print();
+
+            Console.WriteLine($"Checking [{dto.browser().ToLower()}] Version");
+            CheckBrowserVersion(dto.browser().ToLower());
 
             var customSpockToken = launchTeleportingTunnel(dto.environmentType(), dto.opkeyBaseUrl());
             waitForTeleportingTunnelOnline(dto, customSpockToken);
@@ -128,6 +132,40 @@ namespace InstantSpockExecutionRunner
 
 
             return customSpockToken;
+        }
+
+        private static  void CheckBrowserVersion(String browserName)
+        {
+            var registaryFinder = new FileInfo("../../../../../Latest/TeleportingTunnelRegistryFinder.exe");
+            if (!registaryFinder.Exists)
+            {
+                registaryFinder = new FileInfo("./Latest/TeleportingTunnelRegistryFinder.exe");
+            }
+
+            if (!registaryFinder.Exists)
+                throw new FileNotFoundException(registaryFinder.FullName);
+
+
+            ProcessStartInfo registryFinderPSI = new ProcessStartInfo(registaryFinder.FullName);
+            registryFinderPSI.ArgumentList.Add("Read");
+            registryFinderPSI.ArgumentList.Add(browserName.ToLower());
+            registryFinderPSI.RedirectStandardError = true;
+            registryFinderPSI.RedirectStandardOutput = true;
+
+            registryFinderProcess = Process.Start(registryFinderPSI);
+            registryFinderProcess.EnableRaisingEvents = true;
+            registryFinderProcess.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_OutputDataReceived);
+            registryFinderProcess.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_ErrorDataReceived);
+            registryFinderProcess.Exited += new System.EventHandler(registryFinderProcess_Exited);
+
+            registryFinderProcess.BeginErrorReadLine();
+            registryFinderProcess.BeginOutputReadLine();
+
+        }
+
+        static void registryFinderProcess_Exited(object sender, EventArgs e)
+        {
+            Console.WriteLine(string.Format("process exited with code {0}\n", registryFinderProcess.ExitCode.ToString()));
         }
 
         private static void waitForTeleportingTunnelOnline(InstantSpockExecutionDTO dto, String customSpockToken)
