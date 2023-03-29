@@ -2,7 +2,7 @@
   "profiles": {
     "InstantSpockExecutionRunner": {
       "commandName": "Project",
-      "commandLineArgs": "--environmentType=Local --opkeyBaseUrl=http://localhost:56994/ --sessionName=Test --defaultPlugin=Web --build=\"Spock Execution Runner\" --suitepath=\"Project Workspace\\Opkey Test\\OpkeyTestSuite\" --browser=Chrome --username=admin --apikey=\"W418PNA1YV5G6LASC2\" --project=\"P1\""
+      "commandLineArgs": "--environmentType=\"Prod\" --opkeyBaseUrl=\"https://qa1.myopkey.com/\" --sessionName=\"Azure Pipeline Session 1\" --defaultPlugin=\"Web\" --build=\"Azure Pipeline Execution\" --suitepath=\"Project Workspace\\Testing\\TC_11\" --browser=\"Chrome\" --username=\"sachin.bhatia@sstsinc.com\" --apikey=\"DNVDSM60ZHUEFXUNX6\" --project=\"Sachin\""
     }
   }
 }

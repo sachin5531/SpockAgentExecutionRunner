@@ -1,4 +1,5 @@
 ﻿using InstantSpockExecutionRunner.DTOs;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -118,9 +119,13 @@ namespace InstantSpockExecutionRunner
             var startedOn = DateTime.Now;
             while ((DateTime.Now - startedOn).TotalMinutes < 3)
             {
-                var response = client.GetAsync(apiUrl).Result.Content.ReadAsStringAsync().Result;
-                if (response == "Awake")
+                var jsonResponse = client.GetAsync(apiUrl).Result.Content.ReadAsStringAsync().Result;
+
+                var result = JsonConvert.DeserializeObject(jsonResponse).ToString();
+
+                if (result == "Awake")
                     return;
+
                 Thread.Sleep(1000);
             }
             throw new Exception("Waited for 3 minutes for the SpockAgent to come online. Exiting now.");
