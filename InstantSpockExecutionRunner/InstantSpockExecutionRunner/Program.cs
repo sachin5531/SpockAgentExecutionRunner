@@ -13,7 +13,8 @@ namespace InstantSpockExecutionRunner
 {
     class Program
     {
-        static Process teleportingTunnelProcess = null;
+        static Process runTeleportingTunnelProcess = null;
+        static Process installTeleportingTunnelProcess = null;
 
         static void Main(string[] args)
         {
@@ -26,7 +27,7 @@ namespace InstantSpockExecutionRunner
             //now do FinalLocalExecutionInner()
             InitiateSpockExecution(dto, customSpockToken);
 
-            teleportingTunnelProcess.WaitForExit();
+            runTeleportingTunnelProcess.WaitForExit();
         }
 
         private static InstantSpockExecutionDTO validateArgs(string[] args)
@@ -86,27 +87,44 @@ namespace InstantSpockExecutionRunner
             if (!teleportingTunnelJar.Exists)
                 throw new FileNotFoundException(teleportingTunnelJar.FullName);
 
+            //Now Need to install Teleporting Tunnel Utility to extract files is user dir
+            ProcessStartInfo installTunnelPSI = new ProcessStartInfo("java.exe");
+            installTunnelPSI.ArgumentList.Add("-cp");
+            installTunnelPSI.ArgumentList.Add(teleportingTunnelJar.FullName);
+            installTunnelPSI.ArgumentList.Add("com.ssts.sshTeleportingTunnel.CLI_Startup");
+            installTunnelPSI.ArgumentList.Add("-quietInstall");
+            installTunnelPSI.RedirectStandardError = true;
+            installTunnelPSI.RedirectStandardOutput = true;
 
-            ProcessStartInfo psi = new ProcessStartInfo("java.exe");
-            psi.ArgumentList.Add("-cp");
-            psi.ArgumentList.Add(teleportingTunnelJar.FullName);
-            psi.ArgumentList.Add("com.ssts.sshTeleportingTunnel.CLI_Startup");
-            psi.ArgumentList.Add("OpKeyTeleportingTunnel:" + encodedToken);
-            psi.ArgumentList.Add(javaPath);
-            psi.ArgumentList.Add("8");
-            psi.RedirectStandardError = true;
-            psi.RedirectStandardOutput = true;
+            installTeleportingTunnelProcess = Process.Start(installTunnelPSI);
+            installTeleportingTunnelProcess.EnableRaisingEvents = true;
+            installTeleportingTunnelProcess.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_OutputDataReceived);
+            installTeleportingTunnelProcess.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_ErrorDataReceived);
+            installTeleportingTunnelProcess.Exited += new System.EventHandler(installTeleportingTunnelProcess_Exited);
 
-            teleportingTunnelProcess = Process.Start(psi);
+            installTeleportingTunnelProcess.BeginErrorReadLine();
+            installTeleportingTunnelProcess.BeginOutputReadLine();
 
-            teleportingTunnelProcess.EnableRaisingEvents = true;
-            teleportingTunnelProcess.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_OutputDataReceived);
-            teleportingTunnelProcess.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_ErrorDataReceived);
-            teleportingTunnelProcess.Exited += new System.EventHandler(process_Exited);
+            ProcessStartInfo runTeleportingTunnelPSI = new ProcessStartInfo("java.exe");
+            runTeleportingTunnelPSI.ArgumentList.Add("-cp");
+            runTeleportingTunnelPSI.ArgumentList.Add(teleportingTunnelJar.FullName);
+            runTeleportingTunnelPSI.ArgumentList.Add("com.ssts.sshTeleportingTunnel.CLI_Startup");
+            runTeleportingTunnelPSI.ArgumentList.Add("OpKeyTeleportingTunnel:" + encodedToken);
+            runTeleportingTunnelPSI.ArgumentList.Add(javaPath);
+            runTeleportingTunnelPSI.ArgumentList.Add("8");
+            runTeleportingTunnelPSI.RedirectStandardError = true;
+            runTeleportingTunnelPSI.RedirectStandardOutput = true;
+
+            runTeleportingTunnelProcess = Process.Start(runTeleportingTunnelPSI);
+
+            runTeleportingTunnelProcess.EnableRaisingEvents = true;
+            runTeleportingTunnelProcess.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_OutputDataReceived);
+            runTeleportingTunnelProcess.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_ErrorDataReceived);
+            runTeleportingTunnelProcess.Exited += new System.EventHandler(runTeleportingtunelProcess_Exited);
 
 
-            teleportingTunnelProcess.BeginErrorReadLine();
-            teleportingTunnelProcess.BeginOutputReadLine();
+            runTeleportingTunnelProcess.BeginErrorReadLine();
+            runTeleportingTunnelProcess.BeginOutputReadLine();
 
 
             return customSpockToken;
@@ -134,9 +152,14 @@ namespace InstantSpockExecutionRunner
 
         }
 
-        static void process_Exited(object sender, EventArgs e)
+        static void runTeleportingtunelProcess_Exited(object sender, EventArgs e)
         {
-            Console.WriteLine(string.Format("process exited with code {0}\n", teleportingTunnelProcess.ExitCode.ToString()));
+            Console.WriteLine(string.Format("process exited with code {0}\n", runTeleportingTunnelProcess.ExitCode.ToString()));
+        }
+
+        static void installTeleportingTunnelProcess_Exited(object sender, EventArgs e)
+        {
+            Console.WriteLine(string.Format("process exited with code {0}\n", installTeleportingTunnelProcess.ExitCode.ToString()));
         }
 
         static void process_ErrorDataReceived(object sender, DataReceivedEventArgs e)

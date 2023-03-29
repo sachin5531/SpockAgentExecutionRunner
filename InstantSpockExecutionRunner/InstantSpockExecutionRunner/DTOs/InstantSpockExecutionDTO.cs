@@ -68,6 +68,7 @@ namespace InstantSpockExecutionRunner.DTOs
             var methodName = new StackTrace().GetFrame(1).GetMethod().Name;
             return getArgValue(methodName);
         }
+
         private String getArgValue(String argName)
         {
             if (_dict.ContainsKey(argName))
