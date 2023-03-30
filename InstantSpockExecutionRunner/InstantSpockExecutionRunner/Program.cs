@@ -22,8 +22,8 @@ namespace InstantSpockExecutionRunner
             InstantSpockExecutionDTO dto = validateArgs(args);
             dto.print();
 
-            Console.WriteLine($"Checking [{dto.browser().ToLower()}] Version");
-            CheckBrowserVersion(dto.browser().ToLower());
+            //Console.WriteLine($"Checking [{dto.browser().ToLower()}] Version");
+            //CheckBrowserVersion(dto.browser().ToLower());
 
             var customSpockToken = launchTeleportingTunnel(dto.environmentType(), dto.opkeyBaseUrl());
             waitForTeleportingTunnelOnline(dto, customSpockToken);
